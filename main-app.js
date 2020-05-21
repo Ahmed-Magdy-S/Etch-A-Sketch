@@ -2,8 +2,12 @@
 function getRandomColor() {
     return 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
 }
-let percent = 0;
-
+let shadowObj = {
+    'percent': 0,
+    'shadowing': function () {
+        return this.percent = this.percent - 0.1
+    }
+}
 let randomColor = getRandomColor()
 //Darken Color
 const RGB_Linear_Shade = (p, c) => {
@@ -42,12 +46,11 @@ function createGridSquaresDivs(gridSquaresNum) {
         oneGrid.style.width = containerWidth / gridSquaresNum + 'rem';
         oneGrid.style.height = containerWidth / gridSquaresNum + 'rem';
         // Added Hover Effect
-        oneGrid.addEventListener('mouseenter', function () {
-
-            oneGrid.style.backgroundColor = RGB_Linear_Shade(percent, randomColor);
-
-        })
-
+        function changeBgColor(e) {
+            e.currentTarget.style.backgroundColor = RGB_Linear_Shade(percent, randomColor)
+            
+        }
+        oneGrid.addEventListener('mouseenter', changeBgColor)
 
     })
 }
@@ -61,13 +64,12 @@ document.querySelector('.new-game').addEventListener('click', function () {
     document.querySelectorAll('.container div').forEach(function (oneGrid) {
         oneGrid.style.background = 'none';
         percent = 0;
+
         randomColor = getRandomColor()
     })
     let numbers = prompt("how many squares per side to make the new grid");
     if (numbers !== null && numbers !== '' && typeof + numbers == 'number') {
         containerDiv.innerHTML = '';
         createGridSquaresDivs(+numbers);
-
     }
-
 })
